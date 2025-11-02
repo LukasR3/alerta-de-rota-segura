@@ -14,6 +14,13 @@
 
 ---
 
+## 📋 Integrantes
+
+Lucas Rosa da Silva - lucas.rosa2003@gmail.com
+Gustavo Gomes Marcandes - gustavodmarcondes@gmail.com
+João Manuel Ferreira Ferreira - jaofferreira@gmail.com
+Pedro Vinicius dos Anjos Souza - pedrovasouza@gmail.com
+
 ## 📋 Sobre o Projeto
 
 O **Alerta de Rota Segura** é um protótipo de aplicação móvel desenvolvido para demonstrar como pedestres, motoristas e moradores podem navegar com segurança pela cidade, recebendo alertas em tempo real sobre alagamentos, obras e outros riscos que podem afetar sua rota.
