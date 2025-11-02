@@ -2,13 +2,15 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-0.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![React](https://img.shields.io/badge/React-19.2.0-61DAFB?logo=react)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-3178C6?logo=typescript)
-![Vite](https://img.shields.io/badge/Vite-6.2.0-646CFF?logo=vite)
+![Vite](https://img.shields.io/badge/Vite-4.5.0-646CFF?logo=vite)
 
-**Um aplicativo móvel inteligente para visualizar rotas seguras e receber alertas de alagamento em tempo real**
+**Um protótipo de aplicativo móvel inteligente para visualizar rotas seguras e receber alertas de alagamento em tempo real**
+
+[🎥 Ver Demo](#-demonstração) • [🚀 Instalação](#-instalação-e-execução) • [📖 Documentação](#-como-usar)
 
 </div>
 
@@ -16,37 +18,137 @@
 
 ## 📋 Sobre o Projeto
 
-O **Alerta de Rota Segura** é uma aplicação móvel desenvolvida para ajudar pedestres, motoristas e moradores a navegarem com segurança pela cidade, recebendo alertas em tempo real sobre alagamentos, obras e outros riscos que podem afetar sua rota.
+O **Alerta de Rota Segura** é um protótipo de aplicação móvel desenvolvido para demonstrar como pedestres, motoristas e moradores podem navegar com segurança pela cidade, recebendo alertas em tempo real sobre alagamentos, obras e outros riscos que podem afetar sua rota.
 
-O aplicativo categoriza alertas em três tipos:
-- 🚶 **Tipo A**: Alertas para Pedestres (obras na calçada, bloqueios)
+### 🎯 Objetivo
+
+Simular uma experiência completa de usuário desde a **tela inicial do smartphone** até a **visualização interativa de alertas** em um mapa detalhado, demonstrando:
+- Chegada de notificação push na tela inicial
+- Abertura do aplicativo ao tocar na notificação
+- Navegação entre telas (Mapa e Alertas)
+- Interação com marcadores no mapa
+- Visualização de detalhes dos alertas
+
+### 📊 Sistema de Categorização
+
+**Por Tipo de Afetação:**
+- 🚶 **Tipo A**: Alertas para Pedestres (obras na calçada, bloqueios de passagem)
 - 🚗 **Tipo B**: Alertas para Automóveis (alagamentos, vias intransitáveis)
 - 🏠 **Tipo C**: Alertas para Imóveis (granizo, riscos estruturais)
 
+**Por Nível de Gravidade:**
+- 🟡 **Nível 1 (Amarelo)**: Baixo risco - Atenção recomendada
+- 🟠 **Nível 2 (Laranja)**: Médio risco - Cuidado necessário
+- 🔴 **Nível 3 (Vermelho)**: Alto risco - Perigo iminente
+
 ### ✨ Funcionalidades Principais
 
-- 🗺️ **Visualização de Rota Interativa**: Mapa SVG estilizado com rotas animadas
-- 📍 **Localização em Tempo Real**: Acompanhamento da posição atual do usuário
-- 🔔 **Central de Alertas**: Notificações categorizadas por tipo e proximidade
-- ⚠️ **Alertas de Alto Risco**: Destaque para alertas próximos ao usuário
-- 📱 **Interface Mobile**: Design responsivo simulando um smartphone
-- 🎨 **UI/UX Moderna**: Interface limpa e intuitiva com ícones personalizados
+#### 🏠 Tela Inicial (Home Screen)
+- ⏰ Relógio e data em tempo real
+- 🎨 Wallpaper gradiente personalizado
+- � Ícones de aplicativos decorativos
+- ⏱️ **Notificação animada com delay de 4 segundos**
+- 🎬 Animação de entrada suave (slide-down)
+- 👆 Interação por toque para abrir o app
+
+#### 🗺️ Mapa Interativo
+- 🎨 **Design realista** com múltiplas camadas visuais
+- 🏙️ Representação de edifícios, quarteirões e áreas verdes
+- 🌊 Rio Tietê com gradiente realista
+- 🛣️ Avenidas principais nomeadas (Av. Paulista, Av. Alcântara Machado)
+- 📍 Labels de bairros (Mooca, Cerqueira César)
+- 🚶 Rota animada com efeito de movimento
+- ⚠️ **Marcadores clicáveis** com tooltips informativos
+- 📌 Indicador "Você está aqui" pulsante
+- 🎯 Pontos de partida e chegada bem definidos
+
+#### 📋 Painel de Informações
+- ⚠️ Banner de alerta pulsante no topo
+- ⏰ Tempo estimado de chegada
+- 📏 Distância total da rota
+- 🚦 Status do trânsito em tempo real
+- ⏱️ Indicação de atrasos
+- 🔄 Botão para rotas alternativas
+
+#### 🔔 Central de Alertas
+- 📍 Alertas ordenados por proximidade
+- 🎨 Cards expansíveis com detalhes completos
+- 🏷️ Badges de nível de gravidade
+- 🕒 Timestamps relativos (agora, há 10min, etc.)
+- 📍 Distância do usuário
+- 🎯 Destaque para alertas de alto risco
+
+#### 📱 Design de Hardware Realista
+- 📐 Dimensões: 375x812px (iPhone X/11/12)
+- 🎨 Corpo do celular com gradiente realista
+- 🔘 Botões físicos laterais (Power, Volume, Silencioso)
+- 📷 Notch com câmera e speaker
+- ✨ Reflexos e sombras 3D
+- 🌑 Fundo escuro para apresentação profissional
 
 ---
 
 ## 🎯 Demonstração
 
-### Tela do Mapa
-- Visualização da rota de **Rua da Mooca** até **Av. Paulista**
-- Marcadores animados indicando alagamentos e obras
-- Indicador pulsante da localização atual
-- Painel informativo com detalhes da rota
+### 🎬 Fluxo de Uso
 
-### Central de Alertas
-- Lista de notificações ordenadas por proximidade
-- Categorização visual por tipo de alerta
-- Informações detalhadas de cada ocorrência
-- Timestamps e localização aproximada
+1. **Tela Inicial** 
+   - Usuário visualiza a tela inicial do smartphone
+   - Após 4 segundos, notificação de enchente (Nível 2) aparece
+   - Notificação desliza de cima com animação suave
+
+2. **Abertura do App**
+   - Usuário toca na notificação
+   - App abre diretamente na Central de Alertas
+   - Alerta de enchente aparece em destaque no topo
+
+3. **Navegação no Mapa**
+   - Usuário navega para a tela do Mapa
+   - Visualiza rota de Mooca até Av. Paulista
+   - Clica nos marcadores laranjas/amarelos para ver detalhes
+   - Tooltips aparecem com informações completas
+
+4. **Retorno à Home**
+   - Botão no header permite voltar à tela inicial
+   - Simula fechamento do app
+   - Notificação reaparece após 4 segundos
+
+### 🗺️ Mapa Detalhado
+```
+Características do Mapa:
+├── Fundo com grid e padrões de edifícios
+├── Rio Tietê com gradiente azul
+├── Ruas principais iluminadas
+├── Quarteirões representados
+├── Áreas verdes (parques)
+├── Rota animada em azul
+├── 2 alertas interativos
+├── Posição atual do usuário
+└── Painel de informações na base
+```
+
+### 📊 Exemplos de Alertas
+
+**Alerta Nível 2 - Viaduto Alcântara Machado**
+- Tipo: Automóveis (B)
+- Cor: Laranja 🟠
+- Localização: 500m do usuário
+- Status: Via intransitável
+- Tempo: Agora
+
+**Alerta Nível 1 - Obras na Av. Paulista**
+- Tipo: Pedestres (A)
+- Cor: Amarelo 🟡
+- Localização: 2.5km do usuário
+- Status: Calçada bloqueada
+- Tempo: 10 min atrás
+
+**Alerta Nível 3 - Granizo Zona Leste**
+- Tipo: Imóveis (C)
+- Cor: Vermelho 🔴
+- Localização: 5km do usuário
+- Status: Previsão confirmada
+- Tempo: 35 min atrás
 
 ---
 
@@ -54,10 +156,10 @@ O aplicativo categoriza alertas em três tipos:
 
 - **[React](https://react.dev/)** (v19.2.0) - Biblioteca JavaScript para construção de interfaces
 - **[TypeScript](https://www.typescriptlang.org/)** (v5.8.2) - Superset JavaScript com tipagem estática
-- **[Vite](https://vitejs.dev/)** (v6.2.0) - Build tool moderna e rápida
-- **SVG** - Gráficos vetoriais para mapas e ícones
-- **CSS3** - Estilização com Tailwind-like classes
-- **Geolocation API** - Acesso à localização do dispositivo
+- **[Vite](https://vitejs.dev/)** (v4.5.0) - Build tool moderna e rápida
+- **SVG** - Gráficos vetoriais escaláveis para mapas e ícones
+- **CSS3** - Animações, gradientes e efeitos visuais
+- **React Hooks** - useState, useEffect, useCallback para gerenciamento de estado
 
 ---
 
@@ -66,21 +168,22 @@ O aplicativo categoriza alertas em três tipos:
 ```
 alerta-de-rota-segura/
 ├── components/
-│   ├── BottomNav.tsx          # Navegação inferior do app
-│   ├── Icons.tsx              # Componentes de ícones SVG
-│   ├── MapView.tsx            # Visualização do mapa com rotas
+│   ├── BottomNav.tsx          # Navegação inferior (Mapa/Alertas)
+│   ├── HomeScreen.tsx         # Tela inicial do smartphone
+│   ├── Icons.tsx              # Biblioteca de ícones SVG
+│   ├── MapView.tsx            # Mapa interativo com alertas
 │   ├── NotificationCard.tsx   # Card individual de notificação
-│   ├── NotificationsView.tsx  # Lista de alertas/notificações
+│   ├── NotificationsView.tsx  # Lista completa de alertas
 │   ├── RouteInfoPanel.tsx     # Painel de informações da rota
-│   └── StatusBar.tsx          # Barra de status do smartphone
-├── App.tsx                    # Componente principal
-├── types.ts                   # Definições TypeScript
+│   └── StatusBar.tsx          # Barra de status do dispositivo
+├── App.tsx                    # Componente raiz e navegação
+├── types.ts                   # Definições TypeScript (AlertType, AlertLevel, Notification)
 ├── index.tsx                  # Ponto de entrada React
 ├── index.html                 # HTML base
 ├── vite.config.ts            # Configuração do Vite
 ├── tsconfig.json             # Configuração TypeScript
 ├── package.json              # Dependências e scripts
-└── metadata.json             # Metadados do app
+└── metadata.json             # Metadados do aplicativo
 ```
 
 ---
