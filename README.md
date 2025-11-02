@@ -10,8 +10,6 @@
 
 **Um protótipo de aplicativo móvel inteligente para visualizar rotas seguras e receber alertas de alagamento em tempo real**
 
-[🎥 Ver Demo](#-demonstração) • [🚀 Instalação](#-instalação-e-execução) • [📖 Documentação](#-como-usar)
-
 </div>
 
 ---
