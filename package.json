@@ -6,15 +6,23 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "server": "node server.js",
+    "bridge": "node webhook-bridge.js",
+    "start:all": "concurrently \"npm run dev\" \"npm run server\"",
+    "start:webhook": "concurrently \"npm run dev\" \"npm run server\" \"npm run bridge\""
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "node-fetch": "^3.3.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^4.3.0",
+    "concurrently": "^8.2.2",
     "typescript": "~5.8.2",
     "vite": "^4.5.0"
   }

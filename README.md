@@ -152,14 +152,63 @@ Características do Mapa:
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Instalação e Execução
 
-- **[React](https://react.dev/)** (v19.2.0) - Biblioteca JavaScript para construção de interfaces
-- **[TypeScript](https://www.typescriptlang.org/)** (v5.8.2) - Superset JavaScript com tipagem estática
-- **[Vite](https://vitejs.dev/)** (v4.5.0) - Build tool moderna e rápida
-- **SVG** - Gráficos vetoriais escaláveis para mapas e ícones
-- **CSS3** - Animações, gradientes e efeitos visuais
-- **React Hooks** - useState, useEffect, useCallback para gerenciamento de estado
+### Pré-requisitos
+
+- **Node.js** versão 16 ou superior
+- **npm** ou **yarn**
+- Navegador moderno (Chrome, Firefox, Edge, Safari)
+
+### Passos de Instalação
+
+1. **Clone o repositório**:
+```bash
+git clone https://github.com/LukasR3/alerta-de-rota-segura.git
+cd alerta-de-rota-segura
+```
+
+2. **Instale as dependências**:
+```bash
+npm install
+```
+
+3. **Execute o projeto**:
+
+**OPÇÃO 1: Modo Demo (Somente Frontend)**
+```bash
+npm run dev
+```
+Acesse: `http://localhost:3000`
+
+**OPÇÃO 2: Com API Local (Backend + Frontend)**
+```bash
+npm run start:all
+```
+- Frontend: `http://localhost:3000`
+- API: `http://localhost:3001`
+
+**OPÇÃO 3: Com Integração n8n via Webhook.site** ⭐
+```bash
+# 1. Configure o token do webhook.site
+$env:WEBHOOK_TOKEN="seu-token-aqui"
+
+# 2. Inicie tudo (Frontend + API + Bridge)
+npm run start:webhook
+```
+📖 Ver guia completo: [QUICKSTART_WEBHOOK.md](./QUICKSTART_WEBHOOK.md)
+
+### Scripts Disponíveis
+
+```bash
+npm run dev          # Frontend (porta 3000)
+npm run build        # Build de produção
+npm run preview      # Preview do build
+npm run server       # API Express (porta 3001)
+npm run bridge       # Ponte webhook.site
+npm run start:all    # Frontend + API
+npm run start:webhook # Tudo (Frontend + API + Bridge)
+```
 
 ---
 
@@ -192,14 +241,15 @@ alerta-de-rota-segura/
 
 ### Pré-requisitos
 
-- **Node.js** (v16 ou superior)
-- **npm** ou **yarn**
+- **Node.js** (v16 ou superior) - [Download](https://nodejs.org/)
+- **npm** (incluído com Node.js) ou **yarn**
+- Navegador moderno (Chrome, Firefox, Edge, Safari)
 
 ### Passos para Instalação
 
-1. **Clone o repositório** (ou baixe o projeto):
+1. **Clone o repositório**:
 ```bash
-git clone <url-do-repositorio>
+git clone https://github.com/LukasR3/alerta-de-rota-segura.git
 cd alerta-de-rota-segura
 ```
 
@@ -214,84 +264,310 @@ npm run dev
 ```
 
 4. **Acesse no navegador**:
-   - O aplicativo estará disponível em `http://localhost:5173`
+   - Abra `http://localhost:3000` (ou a porta indicada no terminal)
+   - A aplicação será carregada automaticamente
 
 ### Scripts Disponíveis
 
-- `npm run dev` - Inicia o servidor de desenvolvimento
-- `npm run build` - Gera build de produção
-- `npm run preview` - Visualiza o build de produção localmente
+```bash
+npm run dev      # Inicia servidor de desenvolvimento com hot-reload
+npm run build    # Cria build de produção otimizado
+npm run preview  # Visualiza o build de produção localmente
+```
+
+### � Solução de Problemas
+
+**Erro de versão do Node.js:**
+```bash
+# Verifique sua versão do Node.js
+node --version
+
+# Se for inferior a v16, atualize em nodejs.org
+```
+
+**Porta já em uso:**
+```bash
+# O Vite tentará usar a próxima porta disponível automaticamente
+# Ou você pode especificar uma porta:
+npm run dev -- --port 3001
+```
 
 ---
 
 ## 💡 Como Usar
 
-1. **Navegação**: Use os botões na parte inferior para alternar entre as telas de Mapa e Alertas
-2. **Visualize a Rota**: Na tela do mapa, veja sua rota traçada com alertas marcados
-3. **Confira Alertas**: Acesse a Central de Alertas para ver detalhes de cada ocorrência
-4. **Identifique Riscos**: Alertas são codificados por cor e ícone:
-   - 🔴 Vermelho (Veículos) - Alagamentos e vias intransitáveis
-   - 🟠 Laranja (Pedestres) - Obras e bloqueios de calçada
-   - 🟣 Roxo (Imóveis) - Granizo e riscos estruturais
+### 🎬 Experiência Completa
+
+1. **Inicie a Aplicação**
+   - Acesse `http://localhost:3000`
+   - Aguarde a tela inicial carregar
+
+2. **Aguarde a Notificação**
+   - Após 4 segundos, uma notificação de alerta aparecerá
+   - Notificação: "🟠 Alerta de Enchente - Nível 2"
+   - Localização: Viaduto Alcântara Machado
+
+3. **Abra o Aplicativo**
+   - Clique/toque na notificação
+   - O app abrirá na Central de Alertas
+   - Visualize o alerta destacado no topo
+
+4. **Navegue pelo App**
+   - Use os botões inferiores para alternar entre:
+     - 🗺️ **Mapa de Rota**: Visualização geográfica
+     - 🔔 **Central de Alertas**: Lista completa
+
+5. **Interaja com o Mapa**
+   - Clique nos marcadores coloridos
+   - Veja tooltips com detalhes dos alertas
+   - Observe a rota animada
+   - Confira o painel de informações
+
+6. **Explore os Alertas**
+   - Clique em qualquer card para expandir
+   - Veja descrição completa
+   - Confira localização e tempo
+   - Identifique o nível de gravidade
+
+7. **Volte à Tela Inicial**
+   - Clique no ícone 🏠 no header
+   - Retorne à home screen
+   - Notificação reaparecerá após 4s
+
+### 🎨 Guia Visual de Cores
+
+**Níveis de Alerta:**
+- 🟡 **Amarelo** = Nível 1 (Baixo Risco) - Fique atento
+- 🟠 **Laranja** = Nível 2 (Médio Risco) - Cuidado necessário  
+- 🔴 **Vermelho** = Nível 3 (Alto Risco) - Evite a área
+
+**Tipos de Afetação:**
+- 👤 **Ícone de Pessoa** = Afeta Pedestres
+- 🚗 **Ícone de Carro** = Afeta Automóveis
+- 🏠 **Ícone de Casa** = Afeta Imóveis
+
+### 📍 Localização dos Alertas no Mapa
+
+- **Alerta Laranja (Nível 2)**: Meio da rota - Viaduto alagado
+- **Alerta Amarelo (Nível 1)**: Próximo ao destino - Obras na calçada
+- **Ponto Verde**: Origem - Rua da Mooca
+- **Pin Azul**: Destino - Av. Paulista, 1578
+- **Círculo Azul Pulsante**: Sua localização atual
 
 ---
 
 ## 🎨 Design e Interface
 
-O aplicativo simula um smartphone moderno com:
-- Dimensões: 375x812px (padrão iPhone)
-- Borda arredondada e notch superior
-- Status bar realista
-- Navegação por abas na parte inferior
-- Animações suaves e pulsantes
+### 📱 Simulação de Dispositivo
+
+O aplicativo simula um **smartphone moderno** com:
+- **Modelo**: iPhone X/11/12 style
+- **Dimensões**: 375x812px
+- **Formato**: Retrato (Portrait)
+- **Características físicas**:
+  - Notch superior com câmera e speaker
+  - Borda arredondada (50px radius)
+  - Botões laterais (Power, Volume +/-, Silencioso)
+  - Reflexos e sombras realistas
+  - Gradiente no corpo do dispositivo
+
+### 🎭 Animações e Transições
+
+- **Slide-down**: Entrada da notificação (4s delay)
+- **Pulse**: Efeito pulsante em alertas e localização
+- **Dash**: Movimento na linha da rota
+- **Hover**: Aumento dos marcadores ao passar o mouse
+- **Fade-in**: Abertura dos cards de alerta
+- **Scale**: Efeito de pressionar botões
+
+### 🌈 Paleta de Cores
+
+```css
+/* Cores Principais */
+Brand Blue: #007AFF
+Success Green: #34C759
+Warning Yellow: #EAB308
+Alert Orange: #F97316
+Danger Red: #DC2626
+
+/* Gradientes */
+Home Screen: from-blue-900 via-purple-900 to-pink-900
+Phone Body: from-gray-900 to-black
+Map Background: from-gray-700 via-gray-800 to-gray-900
+```
 
 ---
 
-## 🔮 Funcionalidades Futuras
+## 🔮 Melhorias Futuras
 
-- [ ] Integração com API real de dados de trânsito
-- [ ] Notificações push em tempo real
-- [ ] Cálculo automático de rotas alternativas
-- [ ] Histórico de alertas
+### 📱 Funcionalidades
+- [ ] Integração com API real de clima e trânsito
+- [ ] Geolocalização real do usuário
+- [ ] Notificações push nativas
+- [ ] Cálculo de rotas alternativas automático
+- [ ] Histórico de alertas visualizados
+- [ ] Favoritar locais frequentes
+- [ ] Compartilhamento de alertas via redes sociais
+- [ ] Modo offline com cache
+- [ ] Filtros por tipo e nível de alerta
+
+### 🎨 Interface
 - [ ] Modo noturno/escuro
-- [ ] Compartilhamento de alertas entre usuários
-- [ ] Integração com mapas do Google/OpenStreetMap
-- [ ] Suporte a múltiplos idiomas
+- [ ] Temas personalizáveis
+- [ ] Suporte a múltiplos idiomas (i18n)
+- [ ] Acessibilidade (WCAG 2.1)
+- [ ] Gestos touch (swipe, pinch-to-zoom)
+- [ ] Animações mais complexas (Framer Motion)
+- [ ] Feedback háptico (vibração)
+
+### 🗺️ Mapa
+- [ ] Integração com Google Maps / OpenStreetMap
+- [ ] Zoom e pan interativos
+- [ ] Camadas de informação (trânsito, topografia)
+- [ ] Visualização 3D
+- [ ] Street View integration
+- [ ] Marcadores customizados pelo usuário
+- [ ] Rotas para pedestres, ciclistas e motoristas
+
+### 🔔 Alertas
+- [ ] Alertas baseados em preferências do usuário
+- [ ] Raio de busca configurável
+- [ ] Severidade ajustável
+- [ ] Fotos e vídeos dos locais
+- [ ] Comentários da comunidade
+- [ ] Sistema de validação colaborativa
+- [ ] Alertas previstos (machine learning)
+
+### 🔐 Backend e Infraestrutura
+- [ ] API RESTful com Node.js/Express
+- [ ] Banco de dados (MongoDB/PostgreSQL)
+- [ ] Autenticação de usuários (JWT)
+- [ ] WebSockets para atualizações em tempo real
+- [ ] Sistema de cache (Redis)
+- [ ] CDN para assets estáticos
+- [ ] Deploy em cloud (Vercel/AWS/Azure)
+- [ ] Analytics e monitoramento
 
 ---
 
 ## 🤝 Contribuindo
 
-Contribuições são bem-vindas! Sinta-se à vontade para:
+Contribuições são muito bem-vindas! Este é um projeto open-source e toda ajuda é apreciada.
 
-1. Fazer um fork do projeto
-2. Criar uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
-3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
-4. Push para a branch (`git push origin feature/MinhaFeature`)
-5. Abrir um Pull Request
+### Como Contribuir
+
+1. **Fork o projeto**
+   ```bash
+   # Clique no botão "Fork" no GitHub
+   ```
+
+2. **Clone seu fork**
+   ```bash
+   git clone https://github.com/seu-usuario/alerta-de-rota-segura.git
+   cd alerta-de-rota-segura
+   ```
+
+3. **Crie uma branch para sua feature**
+   ```bash
+   git checkout -b feature/MinhaNovaFeature
+   ```
+
+4. **Faça suas alterações**
+   - Escreva código limpo e documentado
+   - Siga o padrão TypeScript do projeto
+   - Adicione comentários quando necessário
+
+5. **Commit suas mudanças**
+   ```bash
+   git add .
+   git commit -m 'feat: Adiciona MinhaNovaFeature'
+   ```
+
+6. **Push para sua branch**
+   ```bash
+   git push origin feature/MinhaNovaFeature
+   ```
+
+7. **Abra um Pull Request**
+   - Descreva as mudanças realizadas
+   - Adicione screenshots se aplicável
+   - Aguarde o review
+
+### 📝 Padrões de Commit
+
+Seguimos o [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` - Nova funcionalidade
+- `fix:` - Correção de bug
+- `docs:` - Alterações na documentação
+- `style:` - Formatação, ponto e vírgula, etc
+- `refactor:` - Refatoração de código
+- `test:` - Adição ou correção de testes
+- `chore:` - Tarefas de manutenção
 
 ---
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está sob a licença **MIT**. Isso significa que você pode:
+
+✅ Usar comercialmente  
+✅ Modificar  
+✅ Distribuir  
+✅ Uso privado  
+
+Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
 ## 👨‍💻 Autor
 
-Desenvolvido com ❤️ para tornar as rotas urbanas mais seguras.
+**Lucas R.**
+
+Desenvolvido com ❤️ e ☕ para tornar as rotas urbanas mais seguras.
+
+- GitHub: [@LukasR3](https://github.com/LukasR3)
+- Projeto: [alerta-de-rota-segura](https://github.com/LukasR3/alerta-de-rota-segura)
+
+---
+
+## � Agradecimentos
+
+- Comunidade React e TypeScript
+- Vite.js pela ferramenta incrível
+- Inspiração em apps de navegação modernos
+- Todos que contribuírem com o projeto
 
 ---
 
 ## 📞 Suporte
 
-Para reportar bugs ou sugerir melhorias, abra uma [issue](../../issues) no repositório.
+Encontrou um bug? Tem uma sugestão? 
+
+- 🐛 [Reportar Bug](https://github.com/LukasR3/alerta-de-rota-segura/issues/new?labels=bug)
+- 💡 [Sugerir Feature](https://github.com/LukasR3/alerta-de-rota-segura/issues/new?labels=enhancement)
+- 📧 Entre em contato através do GitHub
+
+---
+
+## 📊 Status do Projeto
+
+```
+🟢 Ativo e em desenvolvimento
+📅 Última atualização: Novembro 2025
+🎯 Próxima release: v1.1.0
+```
 
 ---
 
 <div align="center">
 
+### ⭐ Se este projeto foi útil, considere dar uma estrela!
+
 **[⬆ Voltar ao topo](#-alerta-de-rota-segura)**
+
+---
+
+Feito com ❤️ usando React + TypeScript + Vite
 
 </div>
