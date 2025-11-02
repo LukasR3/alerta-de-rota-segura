@@ -1,0 +1,565 @@
+{
+  "name": "Alerta de Chuva - Mock End-to-End",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "3fff4e5d-cc06-4679-9595-e49806d22fbd",
+      "name": "Gatilho a cada 5 min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1344,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "config",
+              "value": "{   \"geo\": { \"lat\": -25.4284, \"lon\": -49.2733 },   \"scenario\": \"N2\",   \"thresholds\": { \"precip_mm_next_hour\": 10, \"prob_min\": 0.6 },   \"weather\": { \"baseUrl\": \"MOCKED\" },   \"iot\": { \"url\": \"MOCKED\" },   \"ana\": { \"url\": \"MOCKED\" },   \"ipuc\": { \"url\": \"MOCKED\" },   \"notify\": { \"url\": \"https://httpbin.org/post\" } }",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "cce28e9c-df68-42c3-858f-c3cf97803fd7",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1120,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Caso N2: chuva moderada, probabilidade alta\nconst d = {\n  hourly: {\n    precipitation: [14.8],\n    precipitation_probability: [0.72]\n  },\n  current: { summary: 'chuva moderada com rajadas' }\n};\nreturn [{ json: { ...d, config: $json.config } }];\n"
+      },
+      "id": "087becc5-288f-43c3-a177-ec9c6945b490",
+      "name": "N8N: Consulta API Clima",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -896,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r=items[0].json;\nreturn[{json:{precip_mm_next_hour:r.hourly?.precipitation?.[0]??0,precip_probability:r.hourly?.precipitation_probability?.[0]??0,summary:r.current?.summary??'',config:r.config}}];"
+      },
+      "id": "739abddb-b125-44a9-b2c9-228abe2a4664",
+      "name": "Parse Clima",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "id-1",
+              "leftValue": "={{ $json[\"precip_mm_next_hour\"] }}",
+              "rightValue": "={{ $items(\"Config\", 0, 0)[0].json.config.thresholds.precip_mm_next_hour }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            },
+            {
+              "id": "id-2",
+              "leftValue": "={{ $json[\"precip_probability\"] }}",
+              "rightValue": "={{ $items(\"Config\", 0, 0)[0].json.config.thresholds.prob_min }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "19b3b57d-9e18-446c-b991-49347429be13",
+      "name": "Chuva significativa prevista?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -448,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "9b53d344-3272-41d3-a1f1-0279c5e17a6f",
+      "name": "Fim do Ciclo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "id-1",
+              "name": "captured_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "id-2",
+              "name": "config",
+              "value": "={{ $json.config }}",
+              "type": "object"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "af867875-3625-4e0c-99b6-e32a961a7aff",
+      "name": "N8N: Coleta Dados de Contexto",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Caso N2: lâmina d’água ~60% e obstrução moderada\nconst t = new Date().toISOString();\nreturn [{\n  json: {\n    sensors: [\n      { id:'B1', lat:-25.43, lon:-49.27, distance_m:180, water_level_pct:64, blockage_pct:38, last_seen:t },\n      { id:'B2', lat:-25.43, lon:-49.28, distance_m:320, water_level_pct:59, blockage_pct:32, last_seen:t },\n      { id:'B3', lat:-25.42, lon:-49.27, distance_m:540, water_level_pct:61, blockage_pct:28, last_seen:t }\n    ],\n    meta: { count: 3, window_min: 15 }\n  }\n}];\n"
+      },
+      "id": "9611d071-7e54-49c0-9337-832fb521ae3a",
+      "name": "API Sensor de Bueiro IoT",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Caso N2: nível subindo, abaixo do “alerta”, próximo da “atenção”\nconst t = new Date().toISOString();\nreturn [{\n  json: {\n    station_id: 'ANA-PR-0099',\n    river: 'Belém',\n    timestamp: t,\n    level_m: 3.05,\n    last_24h_change_m: 0.31,\n    trend: 'rising',\n    thresholds: { attention: 3.2, alert: 3.8, flood: 4.5 }\n  }\n}];\n"
+      },
+      "id": "fed55002-054d-4ff8-baeb-7a5c4f86ff66",
+      "name": "API ANA Nível do Rio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        192
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Matriz com mapeamento explícito de nível/impacto\nreturn [{\n  json: {\n    rules_version: '2025-11-02',\n    risk_matrix: [\n      {\n        id: 'N2-TRANSITO',\n        name: 'Chuva moderada + rio subindo OU bueiro ~60%',\n        if: {\n          any: [\n            { \"precip_mm_next_hour\": \">=10\", \"ana.trend\": \"rising\" },\n            { \"precip_mm_next_hour\": \">=10\", \"iot.max_water_level_pct\": \">=55\" }\n          ]\n        },\n        risk: \"moderado\",\n        level: 2,\n        impact: \"transito\"\n      },\n      {\n        id: 'N3-ALTO',\n        name: 'Chuva forte + bueiro crítico',\n        if: { \"precip_mm_next_hour\": \">=20\", \"iot.max_water_level_pct\": \">=80\" },\n        risk: \"alto\",\n        level: 3,\n        impact: \"moradias_comercio\"\n      },\n      { id: 'N1-BAIXO', name: 'Sem sinais críticos', default: true, risk: 'baixo', level: 1, impact: 'fluxo_pessoas' }\n    ],\n    notes: 'Mock focado em nível 2 (trânsito).'\n  }\n}];\n"
+      },
+      "id": "87ee7462-3308-409c-aa58-aaa058a2a722",
+      "name": "API IPUC / BD Interno Regras de Risco",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        368
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "a2326c61-1912-4704-9181-8a3798ed375b",
+      "name": "Merge F+G",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "15a18d47-6aac-4ab7-8b4b-0486b09d7be1",
+      "name": "Merge Tudo",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        448,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const cfg=$items('Config',0,0)[0].json.config;\nconst clima=$items('Parse Clima',0,0)[0].json;\nconst iot=$items('API Sensor de Bueiro IoT',0,0)[0].json;\nconst ana=$items('API ANA Nível do Rio',0,0)[0].json;\nconst ipuc=$items('API IPUC / BD Interno Regras de Risco',0,0)[0].json;\nreturn[{json:{context:{geo:cfg.geo,captured_at:new Date().toISOString(),clima:{precip_mm_next_hour:clima.precip_mm_next_hour,precip_probability:clima.precip_probability,summary:clima.summary},iot_bueiro:iot,ana_nivel_rio:ana,regras_ipuc:ipuc}}}];"
+      },
+      "id": "ab476557-d2ab-429b-b7a5-408c952dc9b6",
+      "name": "N8N: Agrega Dados Clima, Sensor, ANA, IPUC",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://httpbin.org/post",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "=application/json",
+        "body": "=={{ JSON.stringify({      region: $json.region,      risk_level: $json.risk_level,      confidence: $json.confidence,      alert_text: $json.alert_text,      rationale: $json.rationale    }) }}",
+        "options": {}
+      },
+      "id": "a5b761da-92c5-460e-a671-319300d2e93a",
+      "name": "Dispara Alerta Hiperlocal para o Cidadão",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1552,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        832,
+        464
+      ],
+      "id": "dabb186b-79a4-4c54-a45e-1cce594b47d8",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "rQ9tLQeuvfTsjXr7",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"region\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"lat\": { \"type\": \"number\" },\n        \"lon\": { \"type\": \"number\" }\n      },\n      \"required\": [\"lat\", \"lon\"]\n    },\n    \"risk_level\": {\n      \"type\": \"string\",\n      \"enum\": [\"baixo\", \"moderado\", \"alto\"]\n    },\n    \"confidence\": { \"type\": \"number\", \"minimum\": 0, \"maximum\": 1 },\n    \"alert_text\": { \"type\": \"string\" },\n    \"rationale\": { \"type\": \"string\" }\n  },\n  \"alert_level\": { \"type\": \"integer\", \"enum\": [1,2,3] },\n\"impact\": { \"type\": \"string\", \"enum\": [\"fluxo_pessoas\",\"transito\",\"moradias_comercio\"] },\n  \"required\": [\"region\", \"risk_level\", \"confidence\", \"alert_text\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1200,
+        448
+      ],
+      "id": "34200631-b698-4845-9935-7ca9ce0c69a4",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "='Você é um analista de risco de alagamento urbano. Use apenas o que estiver no contexto (clima, sensores de bueiro, ANA, regras IPUC). Se faltar dado, seja conservador e indique incerteza. Linguagem simples e acionável. Saída SOMENTE JSON com:\nregion{lat,lon}, risk_level(baixo|moderado|alto),\nalert_level(1|2|3), impact('fluxo_pessoas'|'transito'|'moradias_comercio'),\nconfidence(0–1), alert_text, rationale.\nContexto: {{ JSON.stringify($json.context) }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        944,
+        288
+      ],
+      "id": "0cddc4b2-7c71-4fc6-9277-6fba1233d0eb",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bbb29482-9f2a-467b-aadd-0f079c073c12",
+              "name": "output.region",
+              "value": "={{ $json.output.region }}",
+              "type": "object"
+            },
+            {
+              "id": "1e249482-e495-45bc-82d6-f5614defd22b",
+              "name": "output.risk_level",
+              "value": "={{ $json.output.risk_level }}",
+              "type": "string"
+            },
+            {
+              "id": "ab5c8be9-f3a1-4104-9c60-3f72b3b5bfc4",
+              "name": "output.confidence",
+              "value": "={{ $json.output.confidence }}",
+              "type": "number"
+            },
+            {
+              "id": "35865153-bc95-4bcf-a9ed-43d0667d319b",
+              "name": "output.alert_text",
+              "value": "={{ $json.output.alert_text }}",
+              "type": "string"
+            },
+            {
+              "id": "25b4af5e-2fab-4689-8a3a-78d7b8350a7d",
+              "name": "output.rationale",
+              "value": "={{ $json.output.rationale }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "d2db942e-814f-45c2-a8b4-f6c2c104bad4",
+      "name": "Formata da IA",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1328,
+        288
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gatilho a cada 5 min": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "N8N: Consulta API Clima",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "N8N: Consulta API Clima": {
+      "main": [
+        [
+          {
+            "node": "Parse Clima",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Clima": {
+      "main": [
+        [
+          {
+            "node": "Chuva significativa prevista?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chuva significativa prevista?": {
+      "main": [
+        [
+          {
+            "node": "N8N: Coleta Dados de Contexto",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fim do Ciclo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "N8N: Coleta Dados de Contexto": {
+      "main": [
+        [
+          {
+            "node": "API Sensor de Bueiro IoT",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "API ANA Nível do Rio",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "API IPUC / BD Interno Regras de Risco",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API Sensor de Bueiro IoT": {
+      "main": [
+        [
+          {
+            "node": "Merge F+G",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API ANA Nível do Rio": {
+      "main": [
+        [
+          {
+            "node": "Merge F+G",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge F+G": {
+      "main": [
+        [
+          {
+            "node": "Merge Tudo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API IPUC / BD Interno Regras de Risco": {
+      "main": [
+        [
+          {
+            "node": "Merge Tudo",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Tudo": {
+      "main": [
+        [
+          {
+            "node": "N8N: Agrega Dados Clima, Sensor, ANA, IPUC",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "N8N: Agrega Dados Clima, Sensor, ANA, IPUC": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Formata da IA",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Formata da IA": {
+      "main": [
+        [
+          {
+            "node": "Dispara Alerta Hiperlocal para o Cidadão",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "277e8581-8660-4031-8644-448998414df1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e01f6ff9fb0a8ec3e3582e536df8cb9e96ce64774bf58620d68c5413a9845911"
+  },
+  "id": "ouYKcoGflV0wIM60",
+  "tags": []
+}
