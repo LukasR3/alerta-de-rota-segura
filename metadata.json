@@ -1,0 +1,8 @@
+
+{
+  "name": "Alerta de Rota Segura",
+  "description": "Um aplicativo móvel para visualizar rotas seguras em um mapa, destacando ruas específicas e recebendo alertas de alagamento próximos com base no tipo de afetação (pedestres, automóveis, imóveis).",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
